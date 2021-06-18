@@ -19,7 +19,7 @@ public class Pizza {
     @JoinTable(joinColumns = {@JoinColumn(name = "pizza_id")},
             inverseJoinColumns = {@JoinColumn(name = "ingredient_id")})
     private List<Ingredient> ingredients;
-    @ManyToMany(mappedBy = "pizzas")
+    @ManyToMany(mappedBy = "pizzas", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<Order> orders = new HashSet<>();
 
     public Pizza() {

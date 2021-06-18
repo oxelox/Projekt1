@@ -20,6 +20,7 @@ public class Order {
     @Enumerated(EnumType.STRING)
     private Status status;
     @ManyToMany(
+            fetch = FetchType.LAZY,
             cascade = {CascadeType.MERGE, CascadeType.PERSIST}
     )
     @JoinTable(
@@ -39,6 +40,7 @@ public class Order {
         this.status = status;
         this.appUser = appUser;
     }
+
 
 
     public Long getId() {
