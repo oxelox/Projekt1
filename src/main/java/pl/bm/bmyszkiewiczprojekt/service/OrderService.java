@@ -33,15 +33,17 @@ public class OrderService {
 
     public void order( List<Pizza> pizzas, String username ){
         BigDecimal price = new BigDecimal("0");
+        StringBuilder description = new StringBuilder();
         for (int i = 0; i < pizzas.size(); i++) {
             price = price.add(pizzas.get(i).getPrice());
+            description.append(pizzas.get(i).getName());
+            if(i< pizzas.size()-1){
+                description.append(", ");
+            }
+
         }
         AppUser appUser = appUserRepository.findByUsername(username);
-        Order order = new Order(LocalDateTime.now(), price, Status.REALIZACJA, appUser);
-        for (Pizza pizza : pizzas) {
-            order.getPizzas().add(pizza);
-            pizza.getOrders().add(order);
-        }
+        Order order = new Order(LocalDateTime.now(), price, Status.REALIZACJA, description.toString(), appUser);
         orderRepository.save(order);
 
     }

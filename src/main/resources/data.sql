@@ -6,7 +6,6 @@ DROP TABLE IF EXISTS `pizza`;
 DROP TABLE IF EXISTS `ingredient`;
 DROP TABLE IF EXISTS `pizza_ingredients`;
 DROP TABLE IF EXISTS `orders`;
-DROP TABLE IF EXISTS `orders_pizzas`;
 SET FOREIGN_KEY_CHECKS = 1;
 
 CREATE TABLE `app_user` (
@@ -68,21 +67,13 @@ CREATE TABLE `orders` (
                                     `order_date` DATETIME,
                                     `price` DECIMAL(5,2),
                                     `status` VARCHAR(20),
+                                    `description` VARCHAR(200),
                                     PRIMARY KEY (`id`),
                                     CONSTRAINT `fk_user_orders`
                                         FOREIGN KEY (`app_user_id`)
                                             REFERENCES `app_user` (`id`)
 );
 
-CREATE TABLE `orders_pizzas`(
-                                    `pizza_id` BIGINT NOT NULL,
-                                    `order_id` BIGINT NOT NULL,
-                                    PRIMARY KEY (`pizza_id`, `order_id`),
-                                    CONSTRAINT `fk_pizza_orders_pizza_id`
-                                        FOREIGN KEY (`pizza_id`) REFERENCES `pizza` (`id`),
-                                    CONSTRAINT `fk_orders_pizza_orders_id`
-                                        FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`)
-);
 
 INSERT INTO `app_user` (id, username, password, email, is_enabled, role) VALUES
 ('1','user','$2a$10$VbqHwpgv/H4m1uasfTpktuXu29fOdEegTPdBCpyEG8OUjqhqqVN6O','test123@gmail.com',TRUE,'ROLE_USER'),

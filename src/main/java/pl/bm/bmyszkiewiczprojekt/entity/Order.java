@@ -19,29 +19,20 @@ public class Order {
     private BigDecimal price;
     @Enumerated(EnumType.STRING)
     private Status status;
-    @ManyToMany(
-            fetch = FetchType.LAZY,
-            cascade = {CascadeType.MERGE, CascadeType.PERSIST}
-    )
-    @JoinTable(
-            name = "orders_pizzas",
-            joinColumns = {@JoinColumn(name = "pizza_id")},
-            inverseJoinColumns = {@JoinColumn(name = "order_id")})
-    private Set<Pizza> pizzas = new HashSet<>();
+    private String description;
     @OneToOne
     private AppUser appUser;
 
     public Order() {
     }
 
-    public Order(LocalDateTime orderDate, BigDecimal price, Status status,  AppUser appUser) {
+    public Order(LocalDateTime orderDate, BigDecimal price, Status status, String description, AppUser appUser) {
         this.orderDate = orderDate;
         this.price = price;
         this.status = status;
+        this.description = description;
         this.appUser = appUser;
     }
-
-
 
     public Long getId() {
         return id;
@@ -67,14 +58,6 @@ public class Order {
         this.price = price;
     }
 
-    public Set<Pizza> getPizzas() {
-        return pizzas;
-    }
-
-    public void setPizzas(final Set<Pizza> pizzas) {
-        this.pizzas = pizzas;
-    }
-
     public AppUser getAppUser() {
         return appUser;
     }
@@ -91,8 +74,13 @@ public class Order {
         this.status = status;
     }
 
+    public String getDescription() {
+        return description;
+    }
 
-
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
     @Override
     public String toString() {
@@ -101,7 +89,7 @@ public class Order {
                 ", orderDate=" + orderDate +
                 ", price=" + price +
                 ", status=" + status +
-                ", pizzas=" + pizzas +
+                ", description='" + description + '\'' +
                 '}';
     }
 }

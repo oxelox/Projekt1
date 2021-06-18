@@ -2,8 +2,6 @@ package pl.bm.bmyszkiewiczprojekt.entity;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -19,9 +17,6 @@ public class Pizza {
     @JoinTable(joinColumns = {@JoinColumn(name = "pizza_id")},
             inverseJoinColumns = {@JoinColumn(name = "ingredient_id")})
     private List<Ingredient> ingredients;
-    @ManyToMany(mappedBy = "pizzas", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private Set<Order> orders = new HashSet<>();
-
     public Pizza() {
     }
 
@@ -73,13 +68,7 @@ public class Pizza {
         this.ingredients = ingredients;
     }
 
-    public Set<Order> getOrders() {
-        return orders;
-    }
 
-    public void setOrders(Set<Order> orders) {
-        this.orders = orders;
-    }
 
     @Override
     public String toString() {
