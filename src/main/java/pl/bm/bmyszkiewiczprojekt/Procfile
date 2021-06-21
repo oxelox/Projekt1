@@ -1,0 +1,1 @@
+web: java -jar target/bmyszkiewicz-projekt-1.jar $PORT

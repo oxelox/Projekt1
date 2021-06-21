@@ -6,6 +6,9 @@ DROP TABLE IF EXISTS `pizza`;
 DROP TABLE IF EXISTS `ingredient`;
 DROP TABLE IF EXISTS `pizza_ingredients`;
 DROP TABLE IF EXISTS `orders`;
+DROP TABLE IF EXISTS `car`;
+DROP TABLE IF EXISTS `deliverer`;
+DROP TABLE IF EXISTS `complaint`;
 SET FOREIGN_KEY_CHECKS = 1;
 
 CREATE TABLE `app_user` (
@@ -60,10 +63,29 @@ CREATE TABLE `pizza_ingredients`(
                                     CONSTRAINT `fk_ingredient_pizza_ingredient_id`
                                         FOREIGN KEY (`ingredient_id`) REFERENCES `ingredient` (`id`)
 );
+CREATE TABLE `car` (
+                       `id` BIGINT NOT NULL AUTO_INCREMENT,
+                       `brand` VARCHAR(100),
+                       `model` VARCHAR(100),
+                       `oc_expire` DATE,
+                       PRIMARY KEY (`id`)
+);
+CREATE TABLE `deliverer` (
+                             `id` BIGINT NOT NULL AUTO_INCREMENT,
+                             `car_id` BIGINT NOT NULL,
+                             `first_name` VARCHAR(200),
+                             `last_name` VARCHAR(200),
+                             PRIMARY KEY (`id`),
+                             CONSTRAINT `fk_deliverer_car`
+                                FOREIGN KEY (`car_id`)
+                                REFERENCES `car` (`id`)
+
+);
 
 CREATE TABLE `orders` (
                                     `id` BIGINT NOT NULL AUTO_INCREMENT,
                                     `app_user_id` BIGINT NOT NULL,
+                                    `deliverer_id` BIGINT NOT NULL,
                                     `order_date` DATETIME,
                                     `price` DECIMAL(5,2),
                                     `status` VARCHAR(20),
@@ -71,9 +93,22 @@ CREATE TABLE `orders` (
                                     PRIMARY KEY (`id`),
                                     CONSTRAINT `fk_user_orders`
                                         FOREIGN KEY (`app_user_id`)
-                                            REFERENCES `app_user` (`id`)
+                                            REFERENCES `app_user` (`id`),
+                                    CONSTRAINT `fk_deliverer_orders`
+                                            FOREIGN KEY (`deliverer_id`)
+                                            REFERENCES `deliverer` (`id`)
 );
 
+CREATE TABLE `complaint` (
+    `id` BIGINT NOT NULL AUTO_INCREMENT,
+    `app_user_id` BIGINT NOT NULL,
+    `description` VARCHAR(200),
+    PRIMARY KEY (`id`),
+    CONSTRAINT `fk_complaint_user`
+                         FOREIGN KEY (`app_user_id`)
+                         REFERENCES app_user (`id`)
+
+);
 
 INSERT INTO `app_user` (id, username, password, email, is_enabled, role) VALUES
 ('1','user','$2a$10$VbqHwpgv/H4m1uasfTpktuXu29fOdEegTPdBCpyEG8OUjqhqqVN6O','test123@gmail.com',TRUE,'ROLE_USER'),
@@ -109,3 +144,20 @@ INSERT INTO `pizza_ingredients` (pizza_id, ingredient_id) VALUES
 ('4','1'),
 ('4','2'),
 ('4','5');
+
+
+
+INSERT INTO `car` (id, brand, model, oc_expire) VALUES
+('1', 'Opel', 'Astra', '2022-06-21'),
+('2', 'Reno', 'Laguna', '2022-06-21'),
+('3', 'Opel', 'Zefira', '2022-06-21');
+
+INSERT INTO `deliverer` (id, car_id, first_name, last_name) VALUES
+('1', '1', 'Wladimir', 'Kulowicz'),
+('2', '2', 'Sasza', 'Piotrowicz'),
+('3', '3', 'Daniel', 'Kowalski');
+
+INSERT INTO `orders` (id, app_user_id, deliverer_id, order_date, price, status, description) VALUES
+('1','1', '1', '2021-05-06', 35.5, 'REALIZACJA', 'Opis 1'),
+('2','1', '3', '2021-05-06', 35.5, 'DOSTAWA', 'Opis 2'),
+('3','1', '2', '2021-05-06', 35.5, 'KONIEC', 'Opis 3');

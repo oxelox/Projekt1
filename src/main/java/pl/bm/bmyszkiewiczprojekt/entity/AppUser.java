@@ -24,6 +24,8 @@ public class AppUser implements UserDetails {
     private AppUserDetails appUserDetails;
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "appUser")
     private List<Order> orderList;
+    @OneToMany(mappedBy = "appUser")
+    private List<Complaint> complaints;
     public AppUser() {
     }
 
@@ -90,6 +92,14 @@ public class AppUser implements UserDetails {
 
     public void setOrderList(List<Order> orderList) {
         this.orderList = orderList;
+    }
+
+    public List<Complaint> getComplaints() {
+        return complaints;
+    }
+
+    public void setComplaints(List<Complaint> complaints) {
+        this.complaints = complaints;
     }
 
     @Override

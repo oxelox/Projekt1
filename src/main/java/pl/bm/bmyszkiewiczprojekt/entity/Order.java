@@ -2,12 +2,8 @@ package pl.bm.bmyszkiewiczprojekt.entity;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+
 
 @Entity
 @Table(name = "orders")
@@ -20,18 +16,21 @@ public class Order {
     @Enumerated(EnumType.STRING)
     private Status status;
     private String description;
-    @OneToOne
+    @ManyToOne
     private AppUser appUser;
+    @ManyToOne()
+    private Deliverer deliverer;
 
     public Order() {
     }
 
-    public Order(LocalDateTime orderDate, BigDecimal price, Status status, String description, AppUser appUser) {
+    public Order(LocalDateTime orderDate, BigDecimal price, Status status, String description, AppUser appUser, Deliverer deliverer) {
         this.orderDate = orderDate;
         this.price = price;
         this.status = status;
         this.description = description;
         this.appUser = appUser;
+        this.deliverer = deliverer;
     }
 
     public Long getId() {
@@ -82,6 +81,14 @@ public class Order {
         this.description = description;
     }
 
+    public Deliverer getDeliverer() {
+        return deliverer;
+    }
+
+    public void setDeliverer(Deliverer deliverer) {
+        this.deliverer = deliverer;
+    }
+
     @Override
     public String toString() {
         return "Order{" +
@@ -90,6 +97,7 @@ public class Order {
                 ", price=" + price +
                 ", status=" + status +
                 ", description='" + description + '\'' +
+                ", deliverer=" + deliverer +
                 '}';
     }
 }
